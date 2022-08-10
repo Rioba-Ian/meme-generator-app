@@ -1,5 +1,5 @@
-import { useState } from "react"
-import MemesData from "../assets/data/MemesData"
+import { useEffect, useState } from "react"
+
 
 export default function Meme() {
     /**
@@ -16,10 +16,17 @@ export default function Meme() {
         randomImage: "https://i.imgflip.com/345v97.jpg"
     })
 
-    const [allMemeImages, setAllMemeImages] = useState(MemesData)
+    const [allMemes, setAllMemes] = useState({})
+
+    // applying use effect to get data from memes API
+    useEffect(() => {
+        fetch("https://api.imgflip.com/get_memes")
+            .then(res => res.json())
+            .then(data => setAllMemes(data.data.memes))
+    }, [])
 
     function getMemeImage() {
-        const memesData = allMemeImages.data.memes
+        const memesData = allMemes
         const randNo = Math.floor(Math.random() * memesData.length)
         const url = memesData[randNo].url
         console.log(url)
